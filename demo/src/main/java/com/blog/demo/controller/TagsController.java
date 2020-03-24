@@ -82,7 +82,6 @@ public class TagsController {
         }
         catch(Exception e)
         {
-            // catch error when get user
             response.setStatus(false);
             response.setCode("500");
             response.setMessage(e.getMessage());

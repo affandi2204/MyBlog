@@ -1,44 +1,25 @@
 package com.blog.demo.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.blog.demo.common.dto.request.RequestTagsDTO;
+import com.blog.demo.common.dto.response.ResponseTagsDTO;
 import com.blog.demo.model.Tags;
-import com.blog.demo.repository.TagsRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * TagsService
  */
-@Service
-public class TagsService {
+public interface TagsService {
+    Page<ResponseTagsDTO> findAll(Pageable pageable);
 
-    private final TagsRepository tagsRepository;
+    ResponseTagsDTO findById(Integer id);
 
-    @Autowired
-    public TagsService(TagsRepository tagsRepository){
-        this.tagsRepository = tagsRepository;
-    }
+    Page<ResponseTagsDTO> findByName(Pageable pageable, String param);
 
-    public List<Tags> findAll(){
-        return tagsRepository.findAll();
-    }
+    Tags save(RequestTagsDTO request);
 
-    public Optional<Tags> findById(Integer id) {
-        return tagsRepository.findById(id);
-    }
+    Tags update(Integer id, RequestTagsDTO request);
 
-    public List<Tags> findByName(String name){
-        return tagsRepository.findByName(name);
-    }
-
-    public Tags save(Tags tags){
-        return tagsRepository.save(tags);
-    }
-
-    public void deleteById(Integer id) {
-        tagsRepository.deleteById(id);
-    }
+    void deleteById(Integer id);
 }

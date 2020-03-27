@@ -22,14 +22,12 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * Tags
  */
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "tags")
@@ -48,7 +46,7 @@ public class Tags {
     private Date created_at;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(updatable = false, name = "updated_at")
+    @Column(updatable = true, name = "updated_at")
     @LastModifiedBy
     private Date updated_at;
 

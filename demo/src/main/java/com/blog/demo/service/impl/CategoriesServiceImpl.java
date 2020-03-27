@@ -3,6 +3,7 @@ package com.blog.demo.service.impl;
 import com.blog.demo.common.dto.request.RequestCategoriesDTO;
 import com.blog.demo.common.dto.response.ResponseCategoriesDTO;
 import com.blog.demo.common.exception.ResourceNotFoundException;
+import com.blog.demo.common.util.DateTime;
 import com.blog.demo.model.Categories;
 import com.blog.demo.repository.CategoriesRepository;
 import com.blog.demo.service.CategoriesService;
@@ -24,6 +25,9 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Autowired
     private CategoriesRepository categoriesRepository;
+
+    @Autowired
+    private DateTime dateTime;
 
     private static final String RESOURCE = "Categories";
     private static final String FIELD = "id";
@@ -95,6 +99,7 @@ public class CategoriesServiceImpl implements CategoriesService {
             );   
             
             BeanUtils.copyProperties(request, categories);
+            categories.setUpdated_at(dateTime.getCurrentDate());
             categoriesRepository.save(categories);
             return categories;
         } catch (ResourceNotFoundException e) {

@@ -23,13 +23,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.lang.Nullable;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * Categories
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "categories")
@@ -49,11 +47,11 @@ public class Categories {
     private Date created_at;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(updatable = false, name = "updated_at")
+    @Column(updatable = true, name = "updated_at")
     @LastModifiedBy
     private Date updated_at;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categories")
     @JsonIgnore
-    private Set<Blog> blog = new HashSet<>();
+    private Set<Blog> blog;
 }

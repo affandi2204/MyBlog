@@ -5,11 +5,11 @@ import javax.validation.Valid;
 
 import com.blog.demo.common.dto.MyPage;
 import com.blog.demo.common.dto.MyPageable;
-import com.blog.demo.common.dto.request.RequestCategoriesDTO;
+import com.blog.demo.common.dto.request.RequestAuthorDTO;
+import com.blog.demo.common.dto.response.ResponseAuthorDTO;
 import com.blog.demo.common.dto.response.ResponseBaseDTO;
-import com.blog.demo.common.dto.response.ResponseCategoriesDTO;
 import com.blog.demo.common.util.PageConverter;
-import com.blog.demo.service.CategoriesService;
+import com.blog.demo.service.AuthorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,24 +28,24 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @RestController
 @RequestMapping(value = "/api")
-public class CategoriesController {
+public class AuthorController {
     @Autowired
-    private CategoriesService categoriesService;
+    private AuthorService authorService;
     
-    @GetMapping(value = "/categories")
-    public ResponseBaseDTO<MyPage<ResponseCategoriesDTO>> getALl(
+    @GetMapping(value = "/author")
+    public ResponseBaseDTO<MyPage<ResponseAuthorDTO>> getALl(
         MyPageable pageable, @RequestParam(required = false) String param, HttpServletRequest request
     ) {
-        Page<ResponseCategoriesDTO> categories;
+        Page<ResponseAuthorDTO> author;
 
         if (param != null) {
-            categories = categoriesService.findByName(MyPageable.convertToPageable(pageable), param);
+            author = authorService.search(MyPageable.convertToPageable(pageable), param);
         } else {
-            categories = categoriesService.findAll(MyPageable.convertToPageable(pageable));
+            author = authorService.findAll(MyPageable.convertToPageable(pageable));
         }
  
-        PageConverter<ResponseCategoriesDTO> converter = new PageConverter<>();
-        String url = String.format("%s://%s:%d/api/categories",request.getScheme(),  request.getServerName(), request.getServerPort());
+        PageConverter<ResponseAuthorDTO> converter = new PageConverter<>();
+        String url = String.format("%s://%s:%d/api/author", request.getScheme(),  request.getServerName(), request.getServerPort());
  
         String search = "";
  
@@ -53,31 +53,31 @@ public class CategoriesController {
             search += "&param="+param;
         }
  
-        MyPage<ResponseCategoriesDTO> response = converter.convert(categories, url, search);
+        MyPage<ResponseAuthorDTO> response = converter.convert(author, url, search);
  
         return ResponseBaseDTO.ok(response);
     }
 
-    @GetMapping(value = "/categories/{id}")
-    public ResponseBaseDTO<ResponseCategoriesDTO> getOne(@PathVariable Integer id) {
-        return ResponseBaseDTO.ok(categoriesService.findById(id));
+    @GetMapping(value = "/author/{id}")
+    public ResponseBaseDTO<ResponseAuthorDTO> getOne(@PathVariable Integer id) {
+        return ResponseBaseDTO.ok(authorService.findById(id));
     }
     
-    @PostMapping(value="/categories")
-    public ResponseBaseDTO create(@RequestBody @Valid RequestCategoriesDTO request) {
-        categoriesService.save(request);
+    @PostMapping(value="/author")
+    public ResponseBaseDTO create(@RequestBody @Valid RequestAuthorDTO request) {
+        authorService.save(request);
         return ResponseBaseDTO.created();
     }
     
-    @PutMapping(value = "/categories/{id}")
-    public ResponseBaseDTO update(@PathVariable Integer id, @RequestBody @Valid RequestCategoriesDTO request) {
-        categoriesService.update(id, request);
+    @PutMapping(value = "/author/{id}")
+    public ResponseBaseDTO update(@PathVariable Integer id, @RequestBody @Valid RequestAuthorDTO request) {
+        authorService.update(id, request);
         return ResponseBaseDTO.ok();
     }
     
-    @DeleteMapping(value = "/categories/{id}")
+    @DeleteMapping(value = "/author/{id}")
     public ResponseBaseDTO delete(@RequestParam Integer id) {
-        categoriesService.deleteById(id);
+        authorService.deleteById(id);
         return ResponseBaseDTO.ok();
     }
 }

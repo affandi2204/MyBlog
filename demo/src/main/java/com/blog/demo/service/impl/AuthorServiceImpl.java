@@ -1,41 +1,41 @@
 package com.blog.demo.service.impl;
 
-import com.blog.demo.common.dto.request.RequestTagsDTO;
-import com.blog.demo.common.dto.response.ResponseTagsDTO;
+import com.blog.demo.common.dto.request.RequestAuthorDTO;
+import com.blog.demo.common.dto.response.ResponseAuthorDTO;
 import com.blog.demo.common.exception.ResourceNotFoundException;
 import com.blog.demo.common.util.DateTime;
-import com.blog.demo.model.Tags;
-import com.blog.demo.repository.TagsRepository;
-import com.blog.demo.service.TagsService;
+import com.blog.demo.model.Author;
+import com.blog.demo.repository.AuthorRepository;
+import com.blog.demo.service.AuthorService;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * TagServiceImpl
+ * AuthorServiceImpl
  */
 @Slf4j
 @Service
-public class TagServiceImpl implements TagsService {
-
+public class AuthorServiceImpl implements AuthorService {
+    
     @Autowired
-    private TagsRepository tagsRepository;
+    private AuthorRepository authorRepository;
 
     @Autowired
     private DateTime dateTime;
 
-    private static final String RESOURCE = "Tags";
+    private static final String RESOURCE = "Author";
     private static final String FIELD = "id";
 
     @Override
     public void deleteById(Integer id) {
         try {
-            tagsRepository.deleteById(id);
+            authorRepository.deleteById(id);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw e;
@@ -43,9 +43,9 @@ public class TagServiceImpl implements TagsService {
     }
 
     @Override
-    public Page<ResponseTagsDTO> findAll(Pageable pageable) {
+    public Page<ResponseAuthorDTO> findAll(Pageable pageable) {
         try {
-            return tagsRepository.findAll(pageable).map(this::fromEntity);
+            return authorRepository.findAll(pageable).map(this::fromEntity);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw e;
@@ -53,11 +53,11 @@ public class TagServiceImpl implements TagsService {
     }
 
     @Override
-    public ResponseTagsDTO findById(Integer id) {
+    public ResponseAuthorDTO findById(Integer id) {
         try {
-            Tags tags = tagsRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(id.toString(), FIELD, RESOURCE));
+            Author author = authorRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(id.toString(), FIELD, RESOURCE));
             
-            return fromEntity(tags);
+            return fromEntity(author);
         } catch (ResourceNotFoundException e) {
             log.error(e.getMessage(), e);
             throw e;
@@ -68,10 +68,10 @@ public class TagServiceImpl implements TagsService {
     }
 
     @Override
-    public Page<ResponseTagsDTO> findByName(Pageable pageable, String param) {
+    public Page<ResponseAuthorDTO> search(Pageable pageable, String param) {
         try {
             param = param.toLowerCase();
-            return tagsRepository.findByName(pageable, param).map(this::fromEntity);
+            return authorRepository.search(pageable, param).map(this::fromEntity);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw e;
@@ -79,12 +79,12 @@ public class TagServiceImpl implements TagsService {
     }
 
     @Override
-    public Tags save(RequestTagsDTO request) {
+    public Author save(RequestAuthorDTO request) {
         try {
-            Tags tags = new Tags();
-            BeanUtils.copyProperties(request, tags);
+            Author author = new Author();
+            BeanUtils.copyProperties(request, author);
          
-            return tagsRepository.save(tags);
+            return authorRepository.save(author);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw e;
@@ -92,16 +92,16 @@ public class TagServiceImpl implements TagsService {
     }
 
     @Override
-    public Tags update(Integer id, RequestTagsDTO request) {
+    public Author update(Integer id, RequestAuthorDTO request) {
         try {
-            Tags tags = tagsRepository.findById(id).orElseThrow(
+            Author author = authorRepository.findById(id).orElseThrow(
                 ()->new ResourceNotFoundException(id.toString(), FIELD, RESOURCE)
             );   
             
-            BeanUtils.copyProperties(request, tags);
-            tags.setUpdated_at(dateTime.getCurrentDate());
-            tagsRepository.save(tags);
-            return tags;
+            BeanUtils.copyProperties(request, author);
+            author.setUpdated_at(dateTime.getCurrentDate());
+            authorRepository.save(author);
+            return author;
         } catch (ResourceNotFoundException e) {
             log.error(e.getMessage(), e);
             throw e;
@@ -111,9 +111,9 @@ public class TagServiceImpl implements TagsService {
         }
     }
 
-    private ResponseTagsDTO fromEntity(Tags tags) {
-        ResponseTagsDTO response = new ResponseTagsDTO();
-        BeanUtils.copyProperties(tags, response);
+    private ResponseAuthorDTO fromEntity(Author author) {
+        ResponseAuthorDTO response = new ResponseAuthorDTO();
+        BeanUtils.copyProperties(author, response);
         return response;
     }
 }

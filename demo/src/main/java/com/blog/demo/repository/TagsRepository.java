@@ -1,20 +1,17 @@
 package com.blog.demo.repository;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.blog.demo.model.Tags;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.transaction.annotation.Transactional;
 /**
  * TagsRepository
  */
-public interface TagsRepository extends JpaRepository<Tags, Integer>{
-
-	List<Tags> findByName(String name);
-
-	Optional<Tags> findById(Integer id);
-
-	void deleteById(Integer id);   
+public interface TagsRepository extends PagingAndSortingRepository<Tags, Integer> {
+	@Transactional(readOnly = true)
+   	@Query("select e from #{#entityName} e where e.name like %:param% ")
+	Page<Tags> findByName(Pageable pageable, String param);
 }

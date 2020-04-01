@@ -5,11 +5,11 @@ import javax.validation.Valid;
 
 import com.blog.demo.common.dto.MyPage;
 import com.blog.demo.common.dto.MyPageable;
-import com.blog.demo.common.dto.request.RequestAuthorDTO;
-import com.blog.demo.common.dto.response.ResponseAuthorDTO;
+import com.blog.demo.common.dto.request.RequestBlogDTO;
 import com.blog.demo.common.dto.response.ResponseBaseDTO;
+import com.blog.demo.common.dto.response.ResponseBlogDTO;
 import com.blog.demo.common.util.PageConverter;
-import com.blog.demo.service.AuthorService;
+import com.blog.demo.service.BlogService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,24 +28,24 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @RestController
 @RequestMapping(value = "/api")
-public class AuthorController {
+public class BlogController {
     @Autowired
-    private AuthorService authorService;
+    private BlogService blogService;
     
-    @GetMapping(value = "/author")
-    public ResponseBaseDTO<MyPage<ResponseAuthorDTO>> getALl(
+    @GetMapping(value = "/blog")
+    public ResponseBaseDTO<MyPage<ResponseBlogDTO>> getALl(
         MyPageable pageable, @RequestParam(required = false) String param, HttpServletRequest request
     ) {
-        Page<ResponseAuthorDTO> author;
+        Page<ResponseBlogDTO> blog;
 
         if (param != null) {
-            author = authorService.search(MyPageable.convertToPageable(pageable), param);
+            blog = blogService.search(MyPageable.convertToPageable(pageable), param);
         } else {
-            author = authorService.findAll(MyPageable.convertToPageable(pageable));
+            blog = blogService.findAll(MyPageable.convertToPageable(pageable));
         }
  
-        PageConverter<ResponseAuthorDTO> converter = new PageConverter<>();
-        String url = String.format("%s://%s:%d/api/author", request.getScheme(),  request.getServerName(), request.getServerPort());
+        PageConverter<ResponseBlogDTO> converter = new PageConverter<>();
+        String url = String.format("%s://%s:%d/api/blog", request.getScheme(),  request.getServerName(), request.getServerPort());
  
         String search = "";
  
@@ -53,30 +53,30 @@ public class AuthorController {
             search += "&param="+param;
         }
  
-        MyPage<ResponseAuthorDTO> response = converter.convert(author, url, search);
+        MyPage<ResponseBlogDTO> response = converter.convert(blog, url, search);
         return ResponseBaseDTO.ok(response);
     }
 
-    @GetMapping(value = "/author/{id}")
-    public ResponseBaseDTO<ResponseAuthorDTO> getOne(@PathVariable Integer id) {
-        return ResponseBaseDTO.ok(authorService.findById(id));
+    @GetMapping(value = "/blog/{id}")
+    public ResponseBaseDTO<ResponseBlogDTO> getOne(@PathVariable Integer id) {
+        return ResponseBaseDTO.ok(blogService.findById(id));
     }
     
-    @PostMapping(value="/author")
-    public ResponseBaseDTO create(@RequestBody @Valid RequestAuthorDTO request) {
-        authorService.save(request);
+    @PostMapping(value="/blog")
+    public ResponseBaseDTO create(@RequestBody @Valid RequestBlogDTO request) {
+        blogService.save(request);
         return ResponseBaseDTO.created();
     }
     
-    @PutMapping(value = "/author/{id}")
-    public ResponseBaseDTO update(@PathVariable Integer id, @RequestBody @Valid RequestAuthorDTO request) {
-        authorService.update(id, request);
+    @PutMapping(value = "/blog/{id}")
+    public ResponseBaseDTO update(@PathVariable Integer id, @RequestBody @Valid RequestBlogDTO request) {
+        blogService.update(id, request);
         return ResponseBaseDTO.ok();
     }
     
-    @DeleteMapping(value = "/author/{id}")
+    @DeleteMapping(value = "/blog/{id}")
     public ResponseBaseDTO delete(@RequestParam Integer id) {
-        authorService.deleteById(id);
+        blogService.deleteById(id);
         return ResponseBaseDTO.ok();
     }
 }

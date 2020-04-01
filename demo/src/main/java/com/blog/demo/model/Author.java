@@ -50,7 +50,6 @@ public class Author {
     private String username;
 
     @Nullable
-    @JsonIgnoreProperties(value = "password", allowSetters = true)
     @Column(length = 150, name = "password")
     private String password;
 

@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -25,9 +26,11 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.lang.Nullable;
 
+import lombok.Data;
 /**
  * Blog
  */
+@Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "blog")
@@ -37,14 +40,14 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Author.class)
-    @MapsId("author_id")
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Author.class, optional = false)
     @JoinColumn(name = "author_id")
+    @JsonIgnore
     private Author author;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Categories.class)
-    @MapsId("categories_id")
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Categories.class, optional = false)
     @JoinColumn(name = "categories_id")
+    @JsonIgnore
     private Categories categories;
 
     @Nullable

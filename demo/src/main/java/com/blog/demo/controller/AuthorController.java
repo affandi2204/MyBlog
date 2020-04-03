@@ -9,17 +9,18 @@ import com.blog.demo.common.dto.request.RequestAuthorDTO;
 import com.blog.demo.common.dto.response.ResponseAuthorDTO;
 import com.blog.demo.common.dto.response.ResponseBaseDTO;
 import com.blog.demo.common.util.PageConverter;
+import com.blog.demo.model.Author;
 import com.blog.demo.service.AuthorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * CategoriesController
  */
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping
 public class AuthorController {
     @Autowired
     private AuthorService authorService;
@@ -45,7 +46,7 @@ public class AuthorController {
         }
  
         PageConverter<ResponseAuthorDTO> converter = new PageConverter<>();
-        String url = String.format("%s://%s:%d/api/author", request.getScheme(),  request.getServerName(), request.getServerPort());
+        String url = String.format("%s://%s:%d/author", request.getScheme(),  request.getServerName(), request.getServerPort());
  
         String search = "";
  
@@ -74,9 +75,9 @@ public class AuthorController {
         return ResponseBaseDTO.ok();
     }
     
-    @DeleteMapping(value = "/author/{id}")
-    public ResponseBaseDTO delete(@RequestParam Integer id) {
-        authorService.deleteById(id);
+    @DeleteMapping(value = "/author")
+    public ResponseBaseDTO delete(@RequestBody Author author) {
+        authorService.deleteById(author.getId());
         return ResponseBaseDTO.ok();
     }
 }

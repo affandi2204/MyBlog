@@ -9,18 +9,8 @@ import lombok.Data;
  * RequestAuthorDTO
  */
 @Data
-public class RequestBlogDTO {
-    @NotNull
-    private Integer authorId;
-
-    @NotNull
-    private Integer categoriesId;
-
+public class RequestCreatePasswordDTO {
     @NotNull
     @NotBlank
-    private String title;
-
-    @NotNull
-    @NotBlank
-    private String content;
+    private String password;
 }

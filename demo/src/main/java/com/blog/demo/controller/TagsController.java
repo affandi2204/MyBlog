@@ -9,6 +9,7 @@ import com.blog.demo.common.dto.request.RequestTagsDTO;
 import com.blog.demo.common.dto.response.ResponseBaseDTO;
 import com.blog.demo.common.dto.response.ResponseTagsDTO;
 import com.blog.demo.common.util.PageConverter;
+import com.blog.demo.model.Tags;
 import com.blog.demo.service.TagsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * AuthorController
  */
 @RestController
-@RequestMapping(path = "/api")
+@RequestMapping
 public class TagsController {
     
     @Autowired
@@ -46,7 +48,7 @@ public class TagsController {
        }
 
        PageConverter<ResponseTagsDTO> converter = new PageConverter<>();
-       String url = String.format("%s://%s:%d/api/tags",request.getScheme(),  request.getServerName(), request.getServerPort());
+       String url = String.format("%s://%s:%d/tags",request.getScheme(),  request.getServerName(), request.getServerPort());
 
        String search = "";
 
@@ -70,9 +72,9 @@ public class TagsController {
         return ResponseBaseDTO.created();
     }
 
-    @DeleteMapping(value = "/tags/{id}")
-    public ResponseBaseDTO deleteTag(@PathVariable(value = "id") Integer id) {
-       tagsService.deleteById(id);
+    @DeleteMapping(value = "/tags")
+    public ResponseBaseDTO deleteTag(@RequestBody Tags tags) {
+       tagsService.deleteById(tags.getId());
        return ResponseBaseDTO.ok();
     }
 

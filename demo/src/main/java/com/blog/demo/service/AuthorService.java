@@ -3,6 +3,7 @@ package com.blog.demo.service;
 import com.blog.demo.common.dto.request.RequestAuthorDTO;
 import com.blog.demo.common.dto.response.ResponseAuthorDTO;
 import com.blog.demo.model.Author;
+import com.blog.demo.model.TokenCreatePassword;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,7 @@ public interface AuthorService {
 
     Page<ResponseAuthorDTO> search(Pageable pageable, String param);
 
-    Author save(RequestAuthorDTO request);
+    TokenCreatePassword save(RequestAuthorDTO request);
 
     Author update(Integer id, RequestAuthorDTO request);
 

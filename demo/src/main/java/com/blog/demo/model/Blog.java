@@ -40,12 +40,12 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Author.class, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Author.class)
     @JoinColumn(name = "author_id")
     @JsonIgnore
     private Author author;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Categories.class, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Categories.class)
     @JoinColumn(name = "categories_id")
     @JsonIgnore
     private Categories categories;

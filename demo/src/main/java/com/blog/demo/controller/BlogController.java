@@ -9,6 +9,7 @@ import com.blog.demo.common.dto.request.RequestBlogDTO;
 import com.blog.demo.common.dto.response.ResponseBaseDTO;
 import com.blog.demo.common.dto.response.ResponseBlogDTO;
 import com.blog.demo.common.util.PageConverter;
+import com.blog.demo.model.Blog;
 import com.blog.demo.service.BlogService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * CategoriesController
  */
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping
 public class BlogController {
     @Autowired
     private BlogService blogService;
@@ -45,7 +46,7 @@ public class BlogController {
         }
  
         PageConverter<ResponseBlogDTO> converter = new PageConverter<>();
-        String url = String.format("%s://%s:%d/api/blog", request.getScheme(),  request.getServerName(), request.getServerPort());
+        String url = String.format("%s://%s:%d/blog", request.getScheme(),  request.getServerName(), request.getServerPort());
  
         String search = "";
  
@@ -74,9 +75,9 @@ public class BlogController {
         return ResponseBaseDTO.ok();
     }
     
-    @DeleteMapping(value = "/blog/{id}")
-    public ResponseBaseDTO delete(@RequestParam Integer id) {
-        blogService.deleteById(id);
+    @DeleteMapping(value = "/blog")
+    public ResponseBaseDTO delete(@RequestBody Blog blog) {
+        blogService.deleteById(blog.getId());
         return ResponseBaseDTO.ok();
     }
 }

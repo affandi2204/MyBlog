@@ -1,11 +1,15 @@
 package com.blog.demo.service.impl;
 
+import java.util.UUID;
+
 import com.blog.demo.common.dto.request.RequestAuthorDTO;
 import com.blog.demo.common.dto.response.ResponseAuthorDTO;
 import com.blog.demo.common.exception.ResourceNotFoundException;
 import com.blog.demo.common.util.DateTime;
 import com.blog.demo.model.Author;
+import com.blog.demo.model.TokenCreatePassword;
 import com.blog.demo.repository.AuthorRepository;
+import com.blog.demo.repository.TokenPasswordRepository;
 import com.blog.demo.service.AuthorService;
 
 import org.springframework.beans.BeanUtils;
@@ -25,6 +29,9 @@ public class AuthorServiceImpl implements AuthorService {
     
     @Autowired
     private AuthorRepository authorRepository;
+
+    @Autowired
+    private TokenPasswordRepository tokenPasswordRepository;
 
     @Autowired
     private DateTime dateTime;
@@ -79,12 +86,18 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author save(RequestAuthorDTO request) {
+    public TokenCreatePassword save(RequestAuthorDTO request) {
         try {
             Author author = new Author();
             BeanUtils.copyProperties(request, author);
-         
-            return authorRepository.save(author);
+            authorRepository.save(author);
+
+            String token = UUID.randomUUID().toString();
+            TokenCreatePassword createToken = new TokenCreatePassword();
+            createToken.setAuthor(author);
+            createToken.setToken(token);
+            
+            return tokenPasswordRepository.save(createToken);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw e;

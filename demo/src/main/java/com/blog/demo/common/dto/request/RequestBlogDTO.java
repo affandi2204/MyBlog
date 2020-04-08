@@ -1,5 +1,7 @@
 package com.blog.demo.common.dto.request;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -11,10 +13,13 @@ import lombok.Data;
 @Data
 public class RequestBlogDTO {
     @NotNull
-    private Integer authorId;
+    private Integer author_id;
 
     @NotNull
-    private Integer categoriesId;
+    private Integer categories_id;
+
+    @NotNull
+    private List<String> tag_name;
 
     @NotNull
     @NotBlank

@@ -13,5 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface TagsRepository extends PagingAndSortingRepository<Tags, Integer> {
 	@Transactional(readOnly = true)
    	@Query("select e from #{#entityName} e where e.name like %:param% ")
-	Page<Tags> findByName(Pageable pageable, String param);
+	Page<Tags> search(Pageable pageable, String param);
+
+	Tags findByName(String name);
 }

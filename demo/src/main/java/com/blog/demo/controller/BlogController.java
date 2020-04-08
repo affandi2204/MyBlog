@@ -33,51 +33,71 @@ public class BlogController {
     @Autowired
     private BlogService blogService;
     
-    @GetMapping(value = "/blog")
+    @GetMapping(value = "/post")
     public ResponseBaseDTO<MyPage<ResponseBlogDTO>> getALl(
-        MyPageable pageable, @RequestParam(required = false) String param, HttpServletRequest request
+        MyPageable pageable, @RequestParam(required = false) String param, 
+        @RequestParam(required = false) Integer author_id, @RequestParam(required = false) Integer categories_id,
+        @RequestParam(required = false) String tag_name, HttpServletRequest request
     ) {
         Page<ResponseBlogDTO> blog;
 
         if (param != null) {
             blog = blogService.search(MyPageable.convertToPageable(pageable), param);
+        } else if (author_id != null) {
+            blog = blogService.searchByAuthor(MyPageable.convertToPageable(pageable), author_id);
+        } else if (categories_id != null) {
+            blog = blogService.searchByCategory(MyPageable.convertToPageable(pageable), categories_id);
+        } else if (tag_name != null) {
+            blog = blogService.searchByTag(MyPageable.convertToPageable(pageable), tag_name);
         } else {
             blog = blogService.findAll(MyPageable.convertToPageable(pageable));
         }
  
         PageConverter<ResponseBlogDTO> converter = new PageConverter<>();
-        String url = String.format("%s://%s:%d/blog", request.getScheme(),  request.getServerName(), request.getServerPort());
+        String url = String.format("%s://%s:%d/post", request.getScheme(),  request.getServerName(), request.getServerPort());
  
         String search = "";
  
-        if(param != null){
+        if(param != null) {
             search += "&param="+param;
+        } else if (author_id != null) {
+            search += "&author_id="+author_id;
+        } else if (categories_id != null) {
+            search += "&categories_id="+categories_id;
+        } else if (tag_name != null) {
+            search += "&tag_name="+tag_name;
         }
  
         MyPage<ResponseBlogDTO> response = converter.convert(blog, url, search);
         return ResponseBaseDTO.ok(response);
     }
 
-    @GetMapping(value = "/blog/{id}")
+    @GetMapping(value = "/post/{id}")
     public ResponseBaseDTO<ResponseBlogDTO> getOne(@PathVariable Integer id) {
         return ResponseBaseDTO.ok(blogService.findById(id));
     }
     
-    @PostMapping(value="/blog")
+    @PostMapping(value="/post")
     public ResponseBaseDTO create(@RequestBody @Valid RequestBlogDTO request) {
         blogService.save(request);
         return ResponseBaseDTO.created();
     }
     
-    @PutMapping(value = "/blog/{id}")
+    @PutMapping(value = "/post/{id}")
     public ResponseBaseDTO update(@PathVariable Integer id, @RequestBody @Valid RequestBlogDTO request) {
         blogService.update(id, request);
         return ResponseBaseDTO.ok();
     }
-    
-    @DeleteMapping(value = "/blog")
+       
+    @DeleteMapping(value = "/post")
     public ResponseBaseDTO delete(@RequestBody Blog blog) {
         blogService.deleteById(blog.getId());
+        return ResponseBaseDTO.ok();
+    }
+
+    @DeleteMapping(value = "/postTags")
+    public ResponseBaseDTO deleteBlogTags(@RequestBody Blog blog) {
+        blogService.deleteByBlog(blog.getId());
         return ResponseBaseDTO.ok();
     }
 }

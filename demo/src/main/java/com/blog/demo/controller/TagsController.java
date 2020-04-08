@@ -42,7 +42,7 @@ public class TagsController {
        Page<ResponseTagsDTO> tags;
 
        if (param != null) {
-           tags = tagsService.findByName(MyPageable.convertToPageable(pageable), param);
+           tags = tagsService.search(MyPageable.convertToPageable(pageable), param);
        } else {
            tags = tagsService.findAll(MyPageable.convertToPageable(pageable));
        }

@@ -17,9 +17,17 @@ public interface BlogService {
 
     Page<ResponseBlogDTO> search(Pageable pageable, String param);
 
+    Page<ResponseBlogDTO> searchByAuthor(Pageable pageable, Integer author_id);
+    
+    Page<ResponseBlogDTO> searchByCategory(Pageable pageable, Integer categories_id);
+
+    Page<ResponseBlogDTO> searchByTag(Pageable pageable, String tag_name);
+
     Blog save(RequestBlogDTO request);
 
     Blog update(Integer id, RequestBlogDTO request);
 
     void deleteById(Integer id);
+
+    void deleteByBlog(Integer blog);
 }

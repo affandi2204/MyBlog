@@ -11,8 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -21,6 +21,8 @@ import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -69,8 +71,8 @@ public class Blog {
     private Date updated_at;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "blog")
-    private Set<Comment> comments = new HashSet<>();
+    private Set<Comment> comments;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "blog")
-    private Set<BlogTags> blogTags = new HashSet<>();
+    private Set<BlogTags> blogTags;
 }

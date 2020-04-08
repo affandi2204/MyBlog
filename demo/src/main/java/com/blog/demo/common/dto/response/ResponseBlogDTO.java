@@ -1,5 +1,6 @@
 package com.blog.demo.common.dto.response;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -16,6 +17,7 @@ public class ResponseBlogDTO {
     private String content;
     private ResponseBlogAuthorDTO author;
     private ResponseBlogCategoriesDTO categories;
+    private ArrayList<ResponseBlogTagsDTO> tags;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy HH:mm:ss",timezone="GMT+7")
     private Date created_at;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy HH:mm:ss",timezone="GMT+7")

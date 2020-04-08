@@ -15,7 +15,9 @@ public interface TagsService {
 
     ResponseTagsDTO findById(Integer id);
 
-    Page<ResponseTagsDTO> findByName(Pageable pageable, String param);
+    Page<ResponseTagsDTO> search(Pageable pageable, String param);
+
+    ResponseTagsDTO findByName(String name);
 
     Tags save(RequestTagsDTO request);
 

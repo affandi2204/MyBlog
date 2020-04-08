@@ -68,10 +68,22 @@ public class TagServiceImpl implements TagsService {
     }
 
     @Override
-    public Page<ResponseTagsDTO> findByName(Pageable pageable, String param) {
+    public Page<ResponseTagsDTO> search(Pageable pageable, String param) {
         try {
             param = param.toLowerCase();
-            return tagsRepository.findByName(pageable, param).map(this::fromEntity);
+            return tagsRepository.search(pageable, param).map(this::fromEntity);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Override
+    public ResponseTagsDTO findByName(String name) {
+        try {
+            Tags tag = tagsRepository.findByName(name);
+
+            return fromEntity(tag);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw e;
